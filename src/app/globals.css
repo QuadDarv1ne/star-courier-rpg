@@ -1,0 +1,312 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.5rem;
+  --background: oklch(0.10 0.012 250);
+  --foreground: oklch(0.94 0.005 60);
+  --card: oklch(0.16 0.014 250);
+  --card-foreground: oklch(0.94 0.005 60);
+  --popover: oklch(0.14 0.014 250);
+  --popover-foreground: oklch(0.94 0.005 60);
+  --primary: oklch(0.78 0.15 70);
+  --primary-foreground: oklch(0.16 0.014 250);
+  --secondary: oklch(0.22 0.02 250);
+  --secondary-foreground: oklch(0.94 0.005 60);
+  --muted: oklch(0.20 0.012 250);
+  --muted-foreground: oklch(0.68 0.01 60);
+  --accent: oklch(0.72 0.16 165);
+  --accent-foreground: oklch(0.10 0.012 250);
+  --destructive: oklch(0.62 0.22 22);
+  --border: oklch(0.30 0.012 250 / 50%);
+  --input: oklch(0.24 0.012 250);
+  --ring: oklch(0.78 0.15 70);
+  --sidebar: oklch(0.14 0.014 250);
+  --sidebar-foreground: oklch(0.94 0.005 60);
+  --sidebar-primary: oklch(0.78 0.15 70);
+  --sidebar-primary-foreground: oklch(0.16 0.014 250);
+  --sidebar-accent: oklch(0.22 0.02 250);
+  --sidebar-accent-foreground: oklch(0.94 0.005 60);
+  --sidebar-border: oklch(0.30 0.012 250 / 50%);
+  --sidebar-ring: oklch(0.78 0.15 70);
+  --color-alchemy: oklch(0.78 0.15 70);
+  --color-biotics: oklch(0.72 0.16 165);
+  --color-psyche: oklch(0.62 0.22 305);
+}
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  body { @apply bg-background text-foreground antialiased; font-feature-settings: "ss01", "cv11"; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: oklch(0.10 0.012 250); }
+  ::-webkit-scrollbar-thumb { background: oklch(0.30 0.04 70 / 60%); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: oklch(0.78 0.15 70 / 80%); }
+}
+
+@layer utilities {
+  .text-alchemy { color: var(--color-alchemy); }
+  .text-biotics { color: var(--color-biotics); }
+  .text-psyche { color: var(--color-psyche); }
+  .bg-alchemy { background-color: var(--color-alchemy); }
+  .bg-biotics { background-color: var(--color-biotics); }
+  .bg-psyche { background-color: var(--color-psyche); }
+  .glow-primary { box-shadow: 0 0 32px oklch(0.78 0.15 70 / 25%), inset 0 0 16px oklch(0.78 0.15 70 / 8%); }
+  .glow-destructive { box-shadow: 0 0 28px oklch(0.62 0.22 22 / 40%), inset 0 0 14px oklch(0.62 0.22 22 / 18%); }
+  .panel { background: linear-gradient(180deg, oklch(0.18 0.014 250 / 92%) 0%, oklch(0.12 0.012 250 / 92%) 100%); border: 1px solid oklch(0.30 0.012 250 / 45%); backdrop-filter: blur(8px); }
+  .panel-glow { background: linear-gradient(180deg, oklch(0.18 0.014 250 / 92%) 0%, oklch(0.12 0.012 250 / 92%) 100%); border: 1px solid oklch(0.78 0.15 70 / 40%); backdrop-filter: blur(8px); box-shadow: 0 0 24px oklch(0.78 0.15 70 / 12%), inset 0 0 14px oklch(0.78 0.15 70 / 6%); }
+  .text-shadow-glow { text-shadow: 0 0 12px oklch(0.78 0.15 70 / 55%), 0 0 32px oklch(0.78 0.15 70 / 20%); }
+  .clip-corner { clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px)); }
+}
+
+/* === ANIMATIONS === */
+@keyframes pulse-glow { 0%,100%{opacity:.7} 50%{opacity:1} }
+.animate-pulse-glow { animation: pulse-glow 2.4s ease-in-out infinite; }
+
+/* Chaotic star drift — 5-step oscillating, per-star random direction */
+@keyframes star-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  20% { transform: translate(var(--drift-x, 3px), var(--drift-y, 1px)) scale(1.15); }
+  40% { transform: translate(calc(var(--drift-x, 3px) * -0.5), var(--drift-y, 1px)) scale(0.95); }
+  60% { transform: translate(calc(var(--drift-x, 3px) * -1), calc(var(--drift-y, 1px) * -0.5)) scale(1.1); }
+  80% { transform: translate(calc(var(--drift-x, 3px) * 0.3), calc(var(--drift-y, 1px) * -1)) scale(0.98); }
+}
+.animate-star-drift { animation: star-drift var(--drift-duration, 8s) ease-in-out infinite; }
+
+/* Star twinkle — brightness + opacity oscillation */
+@keyframes star-twinkle {
+  0%, 100% { opacity: var(--base-opacity, 0.4); filter: brightness(0.8); }
+  50% { opacity: 1; filter: brightness(1.5); }
+}
+.animate-star-twinkle { animation: star-twinkle var(--twinkle-duration, 4s) ease-in-out infinite; animation-delay: var(--twinkle-delay, 0s); }
+
+/* Galaxy slow rotation */
+@keyframes galaxy-rotate {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+.animate-galaxy-rotate { animation: galaxy-rotate 180s linear infinite; }
+
+@keyframes nebula-drift { 0%{transform:translate(0,0) scale(1)} 33%{transform:translate(2vw,-1vh) scale(1.05)} 66%{transform:translate(-2vw,2vh) scale(.95)} 100%{transform:translate(0,0) scale(1)} }
+.animate-nebula-drift { animation: nebula-drift 40s ease-in-out infinite; }
+
+/* Parallax pan — forward + reverse for depth */
+@keyframes starfield-pan { 0%{transform:translate(0,0)} 50%{transform:translate(-1.5vw,.8vh)} 100%{transform:translate(0,0)} }
+.animate-starfield-pan { animation: starfield-pan 60s ease-in-out infinite; }
+@keyframes starfield-pan-reverse { 0%{transform:translate(0,0)} 50%{transform:translate(1.5vw,-.8vh)} 100%{transform:translate(0,0)} }
+.animate-starfield-pan-reverse { animation: starfield-pan-reverse 80s ease-in-out infinite; }
+
+/* Shooting star */
+@keyframes shooting-star {
+  0% { transform: rotate(var(--angle, 25deg)) translate(0, 0); opacity: 0; }
+  5% { opacity: 1; }
+  15% { opacity: 1; }
+  100% { transform: rotate(var(--angle, 25deg)) translate(80vw, 40vh); opacity: 0; }
+}
+
+@keyframes starfield-rotate { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+@keyframes comet-fly { 0%{transform:rotate(var(--angle,30deg)) translate(0,0);opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{transform:rotate(var(--angle,30deg)) translate(60vw,30vh);opacity:0} }
+
+/* Large comet — bigger body, longer tail */
+@keyframes large-comet-fly {
+  0% { transform: rotate(var(--angle, 25deg)) translate(-20vw, 0); opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { transform: rotate(var(--angle, 25deg)) translate(120vw, 60vh); opacity: 0; }
+}
+.animate-large-comet { animation: large-comet-fly var(--comet-duration, 8s) ease-in-out forwards; }
+
+/* Distant gas giant — slow rotation with subtle banding */
+@keyframes planet-rotate {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+.animate-planet-rotate { animation: planet-rotate 120s linear infinite; }
+
+@keyframes planet-glow-pulse {
+  0%, 100% { box-shadow: 0 0 60px 8px var(--planet-glow, oklch(0.65 0.16 195 / 30%)), inset 0 0 30px 4px oklch(0.32 0.08 220 / 25%); }
+  50% { box-shadow: 0 0 80px 12px var(--planet-glow, oklch(0.65 0.16 195 / 50%)), inset 0 0 40px 6px oklch(0.32 0.08 220 / 35%); }
+}
+.animate-planet-glow-pulse { animation: planet-glow-pulse 6s ease-in-out infinite; }
+
+@keyframes ring-shimmer {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.65; }
+}
+.animate-ring-shimmer { animation: ring-shimmer 8s ease-in-out infinite; }
+
+/* Primary CTA pulse — for main "New Game" button */
+@keyframes primary-pulse {
+  0%, 100% { box-shadow: 0 0 24px oklch(0.78 0.15 70 / 25%), 0 0 0 0 oklch(0.78 0.15 70 / 30%), inset 0 0 8px oklch(0.78 0.15 70 / 12%); }
+  50% { box-shadow: 0 0 40px oklch(0.78 0.15 70 / 55%), 0 0 0 4px oklch(0.78 0.15 70 / 15%), inset 0 0 12px oklch(0.78 0.15 70 / 20%); }
+}
+.animate-primary-pulse { animation: primary-pulse 2.4s ease-in-out infinite; }
+
+/* Pulsar — radiating rays from a central point, then fade */
+@keyframes pulsar-burst {
+  0% { transform: scale(0); opacity: 0; }
+  10% { opacity: 1; }
+  30% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2); opacity: 0; }
+}
+.animate-pulsar-burst { animation: pulsar-burst 2.5s ease-out forwards; }
+
+/* Rays — conic-gradient rotation while fading */
+@keyframes pulsar-rays {
+  0% { transform: scale(0.2) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.8; transform: scale(0.4) rotate(20deg); }
+  50% { transform: scale(1.5) rotate(180deg); opacity: 0.4; }
+  100% { transform: scale(2.5) rotate(360deg); opacity: 0; }
+}
+.animate-pulsar-rays { animation: pulsar-rays 2.5s ease-out forwards; }
+
+/* Aurora — flowing ribbons of light at top of screen */
+@keyframes aurora-flow {
+  0% { transform: translateX(-10%) skewX(-12deg); opacity: 0.25; }
+  25% { opacity: 0.45; }
+  50% { transform: translateX(10%) skewX(8deg); opacity: 0.35; }
+  75% { opacity: 0.5; }
+  100% { transform: translateX(-10%) skewX(-12deg); opacity: 0.25; }
+}
+.animate-aurora-flow-1 { animation: aurora-flow 25s ease-in-out infinite; }
+.animate-aurora-flow-2 { animation: aurora-flow 35s ease-in-out infinite reverse; animation-delay: -8s; }
+.animate-aurora-flow-3 { animation: aurora-flow 45s ease-in-out infinite; animation-delay: -15s; }
+@keyframes type-cursor { 0%,100%{opacity:1} 50%{opacity:0} }
+.animate-cursor { animation: type-cursor 1s step-end infinite; }
+@keyframes damage-shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(7px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(3px)} }
+.animate-damage-shake { animation: damage-shake .4s ease-out; }
+
+/* === COMBAT FX === */
+@keyframes pulse-low-hp {
+  0%, 100% { box-shadow: 0 0 12px oklch(0.62 0.22 22 / 35%), inset 0 0 6px oklch(0.62 0.22 22 / 25%); }
+  50% { box-shadow: 0 0 28px oklch(0.62 0.22 22 / 75%), inset 0 0 14px oklch(0.62 0.22 22 / 50%); }
+}
+.animate-pulse-low-hp { animation: pulse-low-hp 1.2s ease-in-out infinite; }
+
+@keyframes intent-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 16px oklch(0.78 0.15 70 / 25%); }
+  50% { transform: scale(1.02); box-shadow: 0 0 28px oklch(0.78 0.15 70 / 50%); }
+}
+.animate-intent-pulse { animation: intent-pulse 2s ease-in-out infinite; }
+
+@keyframes critical-flash {
+  0% { opacity: 0; transform: scale(0.5) rotate(-12deg); }
+  20% { opacity: 1; transform: scale(1.2) rotate(-6deg); }
+  40% { opacity: 1; transform: scale(1) rotate(0deg); }
+  100% { opacity: 0; transform: scale(1.5) rotate(8deg); }
+}
+.animate-critical-flash { animation: critical-flash 1.2s ease-out forwards; }
+
+@keyframes vs-clash {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px oklch(0.78 0.15 70 / 30%)); }
+  50% { transform: scale(1.08); filter: drop-shadow(0 0 18px oklch(0.78 0.15 70 / 70%)); }
+}
+.animate-vs-clash { animation: vs-clash 2.4s ease-in-out infinite; }
+
+@keyframes float-up {
+  0% { opacity: 0; transform: translateY(8px) scale(0.6); }
+  20% { opacity: 1; transform: translateY(-2px) scale(1.1); }
+  60% { opacity: 1; transform: translateY(-30px) scale(1); }
+  100% { opacity: 0; transform: translateY(-60px) scale(0.9); }
+}
+.animate-float-up { animation: float-up 1.2s ease-out forwards; }
+
+@keyframes blood-pulse {
+  0%, 100% { background-color: oklch(0.45 0.22 22 / 25%); }
+  50% { background-color: oklch(0.45 0.22 22 / 45%); }
+}
+.animate-blood-pulse { animation: blood-pulse 1.4s ease-in-out infinite; }
+
+/* Supernova — bright expanding burst that fades */
+@keyframes supernova {
+  0% { transform: scale(0.1); opacity: 0; box-shadow: 0 0 0 0 var(--nova-color), 0 0 0 0 var(--nova-color); }
+  8% { opacity: 1; transform: scale(1); box-shadow: 0 0 16px 4px var(--nova-color), 0 0 32px 8px var(--nova-color); }
+  20% { transform: scale(2.5); opacity: 0.9; box-shadow: 0 0 40px 12px var(--nova-color), 0 0 80px 24px var(--nova-color); }
+  40% { transform: scale(4); opacity: 0.5; box-shadow: 0 0 60px 20px var(--nova-color), 0 0 120px 40px var(--nova-color); }
+  100% { transform: scale(7); opacity: 0; box-shadow: 0 0 0 0 var(--nova-color), 0 0 0 0 var(--nova-color); }
+}
+.animate-supernova { animation: supernova 3.5s ease-out forwards; }
+
+/* Pulse-soft — gentle breathing glow */
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+.animate-pulse-soft { animation: pulse-soft 3s ease-in-out infinite; }
+
+/* Cast-glow — when player casts an ability, ring expands outward */
+@keyframes cast-ring {
+  0% { transform: scale(0.5); opacity: 0.8; border-width: 4px; }
+  50% { opacity: 0.4; border-width: 2px; }
+  100% { transform: scale(2.5); opacity: 0; border-width: 1px; }
+}
+.animate-cast-ring { animation: cast-ring 0.7s ease-out forwards; }
+
+.combat-portrait-ring {
+  position: relative;
+  box-shadow: 0 0 28px oklch(0.78 0.15 70 / 30%), inset 0 0 12px oklch(0.78 0.15 70 / 12%);
+}
+.combat-portrait-ring-enemy {
+  box-shadow: 0 0 28px oklch(0.62 0.22 22 / 35%), inset 0 0 12px oklch(0.62 0.22 22 / 18%);
+}
+.combat-vs-divider {
+  background: linear-gradient(180deg, transparent 0%, oklch(0.78 0.15 70 / 35%) 50%, transparent 100%);
+}
+
+/* === VISUAL THEMES === */
+.theme-emerald {
+  --primary: oklch(0.78 0.16 165);
+  --ring: oklch(0.78 0.16 165);
+  --sidebar-primary: oklch(0.78 0.16 165);
+  --sidebar-ring: oklch(0.78 0.16 165);
+}
+.theme-emerald .text-shadow-glow { text-shadow: 0 0 12px oklch(0.78 0.16 165 / 55%), 0 0 32px oklch(0.78 0.16 165 / 20%); }
+.theme-emerald .glow-primary { box-shadow: 0 0 32px oklch(0.78 0.16 165 / 25%), inset 0 0 16px oklch(0.78 0.16 165 / 8%); }
+.theme-emerald .panel-glow { background: linear-gradient(180deg, oklch(0.18 0.014 250 / 92%) 0%, oklch(0.12 0.012 250 / 92%) 100%); border: 1px solid oklch(0.78 0.16 165 / 40%); backdrop-filter: blur(8px); box-shadow: 0 0 24px oklch(0.78 0.16 165 / 12%), inset 0 0 14px oklch(0.78 0.16 165 / 6%); }
+
+.theme-indigo {
+  --primary: oklch(0.65 0.18 265);
+  --ring: oklch(0.65 0.18 265);
+  --sidebar-primary: oklch(0.65 0.18 265);
+  --sidebar-ring: oklch(0.65 0.18 265);
+}
+.theme-indigo .text-shadow-glow { text-shadow: 0 0 12px oklch(0.65 0.18 265 / 55%), 0 0 32px oklch(0.65 0.18 265 / 20%); }
+.theme-indigo .glow-primary { box-shadow: 0 0 32px oklch(0.65 0.18 265 / 25%), inset 0 0 16px oklch(0.65 0.18 265 / 8%); }
+.theme-indigo .panel-glow { background: linear-gradient(180deg, oklch(0.18 0.014 250 / 92%) 0%, oklch(0.12 0.012 250 / 92%) 100%); border: 1px solid oklch(0.65 0.18 265 / 40%); backdrop-filter: blur(8px); box-shadow: 0 0 24px oklch(0.65 0.18 265 / 12%), inset 0 0 14px oklch(0.65 0.18 265 / 6%); }
+
+.theme-crimson {
+  --primary: oklch(0.65 0.22 22);
+  --ring: oklch(0.65 0.22 22);
+  --sidebar-primary: oklch(0.65 0.22 22);
+  --sidebar-ring: oklch(0.65 0.22 22);
+}
+.theme-crimson .text-shadow-glow { text-shadow: 0 0 12px oklch(0.65 0.22 22 / 55%), 0 0 32px oklch(0.65 0.22 22 / 20%); }
+.theme-crimson .glow-primary { box-shadow: 0 0 32px oklch(0.65 0.22 22 / 25%), inset 0 0 16px oklch(0.65 0.22 22 / 8%); }
+.theme-crimson .panel-glow { background: linear-gradient(180deg, oklch(0.18 0.014 250 / 92%) 0%, oklch(0.12 0.012 250 / 92%) 100%); border: 1px solid oklch(0.65 0.22 22 / 40%); backdrop-filter: blur(8px); box-shadow: 0 0 24px oklch(0.65 0.22 22 / 12%), inset 0 0 14px oklch(0.65 0.22 22 / 6%); }

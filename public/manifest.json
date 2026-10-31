@@ -1,0 +1,19 @@
+{
+  "name": "Star Courier — Космическая RPG",
+  "short_name": "Star Courier",
+  "description": "Капитан Макс Велл и экипаж звездолёта «Элея» доставляют загадочный артефакт через пиратские рубежи. Шесть глав, три ветки способностей, три финала.",
+  "lang": "ru",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0a0a1a",
+  "theme_color": "#0a0a1a",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
