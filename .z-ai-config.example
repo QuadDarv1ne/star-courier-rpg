@@ -1,0 +1,6 @@
+{
+  "baseUrl": "https://api.z.ai/api/paas/v4",
+  "apiKey": "ВАШ_API_KEY_ОТ_Z.AI",
+  "chatId": "",
+  "userId": ""
+}

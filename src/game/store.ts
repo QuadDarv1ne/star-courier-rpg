@@ -935,7 +935,15 @@ sendChatMessage: async (characterId, message, options) => {
           });
 
           if (!res.ok) {
-            throw new Error(`Chat API failed: ${res.status}`);
+            // The route explains why (e.g. provider not configured); prefer that
+            // over a bare status code so the player sees an actionable message.
+            let apiError = "";
+            try {
+              apiError = ((await res.json()) as { error?: string })?.error ?? "";
+            } catch {
+              // Non-JSON error body — fall back to the status.
+            }
+            throw new Error(apiError || `Chat API failed: ${res.status}`);
           }
 
           // Check if response is a stream (SSE) or JSON
@@ -1074,7 +1082,13 @@ sendChatMessage: async (characterId, message, options) => {
         } catch (e) {
           console.error("Chat request failed:", e);
           set({ chatLoading: false });
-          get().pushToast("Связь с экипажем прервана", "bad");
+          const reason = e instanceof Error ? e.message : "";
+          get().pushToast(
+            reason
+              ? `Связь с экипажем прервана: ${reason.slice(0, 140)}`
+              : "Связь с экипажем прервана",
+            "bad"
+          );
         }
       },
 

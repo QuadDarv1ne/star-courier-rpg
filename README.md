@@ -43,6 +43,38 @@ npm run dev
 
 Откройте http://localhost:3000
 
+### База данных (аналитика и админка)
+
+Prisma использует SQLite, путь берётся из `DATABASE_URL`. Файл `.env` не попадает в git, поэтому создайте его локально:
+
+```bash
+# .env
+DATABASE_URL="file:./dev.db"
+```
+
+После этого сгенерируйте клиент и создайте файл базы:
+
+```bash
+npm run db:generate
+npm run db:push
+```
+
+Без этих шагов `/api/analytics` отвечает `500` с ошибкой `@prisma/client did not initialize yet`.
+
+### AI-чат с экипажем
+
+Чат ходит в Z.AI через `z-ai-web-dev-sdk`. SDK читает `baseUrl` и `apiKey` из файла `.z-ai-config`, ища его в порядке: каталог проекта → домашний каталог → `/etc`. Файл тоже не в git, шаблон — в `.z-ai-config.example`:
+
+```bash
+# скопировать и вписать свой ключ
+copy .z-ai-config.example .z-ai-config     # Windows
+cp .z-ai-config.example .z-ai-config       # Unix
+```
+
+`baseUrl` должен включать версию API (`https://api.z.ai/api/paas/v4`) — SDK сам допишет `/chat/completions`. Ключ создаётся в кабинете Z.AI («API Keys»). На превью-платформе space-z.ai этот файл предоставляет само окружение.
+
+Если `.z-ai-config` отсутствует, `/api/chat` отвечает `503` с текстом «AI-провайдер не настроен» — чат не заработает сам собой, нужен ключ.
+
 ## Сборка
 
 ```bash

@@ -268,8 +268,32 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, response, fallback: false });
   } catch (e) {
     console.error("Chat API error:", e);
+    const detail = e instanceof Error ? e.message : String(e);
+
+    // The SDK reads baseUrl/apiKey from a git-ignored .z-ai-config file, so this
+    // failure means the provider was never configured on this machine — it will
+    // not fix itself on retry, so report it as a distinct, actionable status.
+    if (detail.includes("Configuration file not found") || detail.includes(".z-ai-config")) {
+      return NextResponse.json(
+        {
+          ok: false,
+          configMissing: true,
+          error:
+            "AI-провайдер не настроен: создайте .z-ai-config (шаблон — в .z-ai-config.example)",
+        },
+        { status: 503 }
+      );
+    }
+
     return NextResponse.json(
-      { ok: false, error: "Failed to generate response" },
+      {
+        ok: false,
+        // Keep upstream details out of production responses, expose them in dev.
+        error:
+          process.env.NODE_ENV === "production"
+            ? "Failed to generate response"
+            : `Failed to generate response: ${detail.slice(0, 300)}`,
+      },
       { status: 500 }
     );
   }
