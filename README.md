@@ -61,6 +61,12 @@ npm run db:push
 
 Без этих шагов `/api/analytics` отвечает `500` с ошибкой `@prisma/client did not initialize yet`.
 
+`npm install` сам запускает `prisma generate` через скрипт `postinstall`, так что на чистой копии проекта этих команд можно не выполнять. Если `postinstall` сообщит «Prisma client was NOT generated» — см. пункт про Windows ниже.
+
+> Почему это вообще происходит: npm 11 по умолчанию блокирует install-скрипты зависимостей (`npm warn allow-scripts`), в том числе `postinstall` у `@prisma/client`, который обычно и генерирует клиент. Клиент остаётся заглушкой из `npm pack`, и любой роут, импортирующий `@/lib/db`, падает с `500`. Собственный `postinstall` проекта этим ограничением не затронут — он и закрывает проблему.
+
+**Windows:** `prisma generate` не может перезаписать `node_modules\.prisma\client\query_engine-windows.dll.node`, пока запущен dev-сервер (процесс держит DLL) — будет `EPERM: operation not permitted, rename ...`. Сначала остановите `npm run dev`, затем генерируйте. Оставшиеся файлы `query_engine-windows.dll.node.tmp*` — безвредный мусор неудачной перезаписи, их можно удалить.
+
 ### AI-чат с экипажем
 
 Чат ходит в Z.AI через `z-ai-web-dev-sdk`. SDK читает `baseUrl` и `apiKey` из файла `.z-ai-config`, ища его в порядке: каталог проекта → домашний каталог → `/etc`. Файл тоже не в git, шаблон — в `.z-ai-config.example`:
