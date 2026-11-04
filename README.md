@@ -2,6 +2,8 @@
 
 ![Главная страница](https://github.com/QuadDarv1ne/star-courier-rpg/blob/4c4057291bbba4c13c3dac9a927956d2f19d6b7c/img/Star%20Courier.png)
 
+![О проекте](https://github.com/QuadDarv1ne/star-courier-rpg/blob/1ac4548def1fc2babf79771282e274c8f6522a39/img/Star%20Courier%20-%20%D0%BA%D0%BE%D0%B4%D0%B5%D0%BA%D1%81%20%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0.png)
+
 Космическая RPG, в которой вы играете за капитана Макса Велла, командующего звездолётом «Элея» с живым ядром и ИИ-сознанием по имени Афина. После тринадцати лет крио-сна капитан просыпается в пустом корабле, без экипажа и без памяти о последних событиях.
 
 ## Особенности
